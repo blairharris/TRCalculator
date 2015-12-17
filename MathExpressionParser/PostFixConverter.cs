@@ -9,11 +9,17 @@ namespace MathExpressionParser
     public class PostFixConverter : IPostfixConverter
     {
         private readonly string _supportedOperators = @"+-*/";
-        private Stack<char> OperatorStack; 
+        private Stack<char> _operatorStack;
 
+        /// <summary>
+        /// Takes an Infix math expression e.g. 2+2 and converts to postFix/reverse-polish-notation e.g. 22+
+        /// See https://en.wikipedia.org/wiki/Shunting-yard_algorithm
+        /// </summary>
+        /// <param name="infixMathExpression"></param>
+        /// <returns>Expression converted to PostFix notation</returns>
         public string InfixToPostfix(string infixMathExpression)
         {
-            OperatorStack = new Stack<char>();
+            _operatorStack = new Stack<char>();
             var postFixExpression = new StringBuilder(); 
 
             foreach (var c in infixMathExpression)
@@ -27,14 +33,14 @@ namespace MathExpressionParser
 
 
                     var currentOperator = new MathOperator(c);
-                    if (OperatorStack.Count > 0)
+                    if (_operatorStack.Count > 0)
                     {
                         while (ThereIsAMathOperatorAtTheTopOfTheStack())
                         {
                             if (currentOperator.IsLeftAssociativeAndPrecendenceIsLessThanOfEqualTo(OperatorAtTopOfStack) ||
                                 currentOperator.IsRightAssociativeAndPrecendenceIsGreaterThan(OperatorAtTopOfStack))
                             {
-                                postFixExpression.Append(OperatorStack.Pop());
+                                postFixExpression.Append(_operatorStack.Pop());
                             }
                             else
                             {
@@ -43,65 +49,59 @@ namespace MathExpressionParser
                         }
                     }
 
-                    OperatorStack.Push(c);
+                    _operatorStack.Push(c);
                     if (postFixExpression.Length == 0 && c == '-')
                     {
-                        postFixExpression.Append(OperatorStack.Pop());
+                        postFixExpression.Append(_operatorStack.Pop());
                     }
                 }
                 else if (c == '(')
                 {
-                    OperatorStack.Push(c);
+                    _operatorStack.Push(c);
                 }
                 else if (c == ')')
                 {
-                    while (OperatorStack.Count > 0)
-                    {
-                        if (OperatorStack.Peek() != '(')
-                            postFixExpression.Append(OperatorStack.Pop());
-                        else
-                        {
-                            OperatorStack.Pop();
-                            break;
-                        }
-                    }
-                    
+                    PopFromStackUntilLeftParenthesisFound(postFixExpression);
                 }
 
             }
 
-            while (OperatorStack.Count > 0)
+            while (_operatorStack.Count > 0)
             {
-                postFixExpression.Append(OperatorStack.Pop());
+                postFixExpression.Append(_operatorStack.Pop());
             }
 
             return postFixExpression.ToString();
         }
 
-        private bool ThereIsAMathOperatorAtTheTopOfTheStack()
+        private void PopFromStackUntilLeftParenthesisFound(StringBuilder postFixExpression)
         {
-            if (OperatorStack.Count == 0)
-                return false;
-            else
+            while (_operatorStack.Count > 0)
             {
-                bool notBrackets = (OperatorStack.Peek() != '(' && OperatorStack.Peek() != ')');
-                return notBrackets;
+                if (_operatorStack.Peek() != '(')
+                    postFixExpression.Append(_operatorStack.Pop());
+                else
+                {
+                    _operatorStack.Pop();
+                    break;
+                }
             }
         }
 
-        private MathOperator OperatorAtTopOfStack
+        private bool ThereIsAMathOperatorAtTheTopOfTheStack()
         {
-            get { return new MathOperator(OperatorStack.Peek()); }
+            if (_operatorStack.Count == 0)
+                return false;
+            else
+            {
+                return IsOperator(_operatorStack.Peek());
+            }
         }
 
-        private bool IsOperator(char c)
-        {
-            return _supportedOperators.Contains(c);
-        }
+        private MathOperator OperatorAtTopOfStack => new MathOperator(_operatorStack.Peek());
 
-        private bool IsNumber(char c)
-        {
-            return char.IsNumber(c);
-        }
+        private bool IsOperator(char c) => _supportedOperators.Contains(c);
+
+        private bool IsNumber(char c) => char.IsNumber(c);
     }
 }

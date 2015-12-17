@@ -26,13 +26,11 @@ namespace MathExpressionParser
                     var currentOperator = new MathOperator(c);
                     if (operatorStack.Count > 0)
                     {
-                        var operatorAtTopOfStack = new MathOperator(operatorStack.Peek());
-
-                        while (operatorStack.Count > 0 &&
-                               currentOperator.IsLeftAssociativeAndPrecendenceIsLessThanOfEqualTo(operatorAtTopOfStack) ||
-                               currentOperator.IsRightAssociativeAndPrecendenceIsGreaterThan(operatorAtTopOfStack))
+                        while (ThereIsAMathOperatorAtTheTopOfTheStack(operatorStack))
                         {
-                            postFixExpression.Append(operatorStack.Pop());
+                            if(currentOperator.IsLeftAssociativeAndPrecendenceIsLessThanOfEqualTo(OperatorAtTopOfStack(operatorStack)) ||
+                               currentOperator.IsRightAssociativeAndPrecendenceIsGreaterThan(OperatorAtTopOfStack(operatorStack)))
+                                postFixExpression.Append(operatorStack.Pop());
                         }
                     }
 
@@ -44,6 +42,16 @@ namespace MathExpressionParser
                 }
                 else if (c == ')')
                 {
+                    while (operatorStack.Count > 0)
+                    {
+                        if (operatorStack.Peek() != '(')
+                            postFixExpression.Append(operatorStack.Pop());
+                        else
+                        {
+                            operatorStack.Pop();
+                            break;
+                        }
+                    }
                     
                 }
 
@@ -57,6 +65,35 @@ namespace MathExpressionParser
             return postFixExpression.ToString();
         }
 
+        private bool ThereIsAMathOperatorAtTheTopOfTheStack(Stack<char> operatorStack)
+        {
+            if (operatorStack.Count == 0)
+                return false;
+            else
+            {
+                bool notBrackets = (operatorStack.Peek() != '(' && operatorStack.Peek() != ')');
+                return notBrackets;
+            }
+        }
+
+        private bool OperatorStackContainsMoreThanParenthesis(Stack<char> operatorStack)
+        {
+            foreach (var c in operatorStack.ToArray())
+            {
+                if (c != '(' || c != ')') return true;
+            }
+            return false;
+        }
+
+        private MathOperator OperatorAtTopOfStack(Stack<char> operatorStack)
+        {
+            foreach (var c in operatorStack.ToArray())
+            {
+                if (c != '(' && c != ')') return new MathOperator(c);
+            }
+
+            throw new MathExpressionException();
+        }
 
         private bool IsOperator(char c)
         {

@@ -18,6 +18,13 @@ namespace MathExpressionParser.Tests
         }
 
         [TestMethod]
+        public void ValidExpression_MinusOnePlusTwo()
+        {
+            var result = _converter.InfixToPostfix("-1+2");
+            result.Should().Be("-12+");
+        }
+
+        [TestMethod]
         public void ValidExpression_TwoPlusTwoTimes5()
         {
             var result = _converter.InfixToPostfix("2+2*5");

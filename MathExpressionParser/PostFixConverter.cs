@@ -9,10 +9,11 @@ namespace MathExpressionParser
     public class PostFixConverter : IPostfixConverter
     {
         private readonly string _supportedOperators = @"+-*/";
+        private Stack<char> OperatorStack; 
 
         public string InfixToPostfix(string infixMathExpression)
         {
-            var operatorStack = new Stack<char>();
+            OperatorStack = new Stack<char>();
             var postFixExpression = new StringBuilder(); 
 
             foreach (var c in infixMathExpression)
@@ -23,32 +24,44 @@ namespace MathExpressionParser
                 }
                 else if (IsOperator(c))
                 {
+
+
                     var currentOperator = new MathOperator(c);
-                    if (operatorStack.Count > 0)
+                    if (OperatorStack.Count > 0)
                     {
-                        while (ThereIsAMathOperatorAtTheTopOfTheStack(operatorStack))
+                        while (ThereIsAMathOperatorAtTheTopOfTheStack())
                         {
-                            if(currentOperator.IsLeftAssociativeAndPrecendenceIsLessThanOfEqualTo(OperatorAtTopOfStack(operatorStack)) ||
-                               currentOperator.IsRightAssociativeAndPrecendenceIsGreaterThan(OperatorAtTopOfStack(operatorStack)))
-                                postFixExpression.Append(operatorStack.Pop());
+                            if (currentOperator.IsLeftAssociativeAndPrecendenceIsLessThanOfEqualTo(OperatorAtTopOfStack) ||
+                                currentOperator.IsRightAssociativeAndPrecendenceIsGreaterThan(OperatorAtTopOfStack))
+                            {
+                                postFixExpression.Append(OperatorStack.Pop());
+                            }
+                            else
+                            {
+                                break;
+                            }
                         }
                     }
 
-                    operatorStack.Push(c);
+                    OperatorStack.Push(c);
+                    if (postFixExpression.Length == 0 && c == '-')
+                    {
+                        postFixExpression.Append(OperatorStack.Pop());
+                    }
                 }
                 else if (c == '(')
                 {
-                    operatorStack.Push(c);
+                    OperatorStack.Push(c);
                 }
                 else if (c == ')')
                 {
-                    while (operatorStack.Count > 0)
+                    while (OperatorStack.Count > 0)
                     {
-                        if (operatorStack.Peek() != '(')
-                            postFixExpression.Append(operatorStack.Pop());
+                        if (OperatorStack.Peek() != '(')
+                            postFixExpression.Append(OperatorStack.Pop());
                         else
                         {
-                            operatorStack.Pop();
+                            OperatorStack.Pop();
                             break;
                         }
                     }
@@ -57,42 +70,28 @@ namespace MathExpressionParser
 
             }
 
-            while (operatorStack.Count > 0)
+            while (OperatorStack.Count > 0)
             {
-                postFixExpression.Append(operatorStack.Pop());
+                postFixExpression.Append(OperatorStack.Pop());
             }
 
             return postFixExpression.ToString();
         }
 
-        private bool ThereIsAMathOperatorAtTheTopOfTheStack(Stack<char> operatorStack)
+        private bool ThereIsAMathOperatorAtTheTopOfTheStack()
         {
-            if (operatorStack.Count == 0)
+            if (OperatorStack.Count == 0)
                 return false;
             else
             {
-                bool notBrackets = (operatorStack.Peek() != '(' && operatorStack.Peek() != ')');
+                bool notBrackets = (OperatorStack.Peek() != '(' && OperatorStack.Peek() != ')');
                 return notBrackets;
             }
         }
 
-        private bool OperatorStackContainsMoreThanParenthesis(Stack<char> operatorStack)
+        private MathOperator OperatorAtTopOfStack
         {
-            foreach (var c in operatorStack.ToArray())
-            {
-                if (c != '(' || c != ')') return true;
-            }
-            return false;
-        }
-
-        private MathOperator OperatorAtTopOfStack(Stack<char> operatorStack)
-        {
-            foreach (var c in operatorStack.ToArray())
-            {
-                if (c != '(' && c != ')') return new MathOperator(c);
-            }
-
-            throw new MathExpressionException();
+            get { return new MathOperator(OperatorStack.Peek()); }
         }
 
         private bool IsOperator(char c)

@@ -8,12 +8,21 @@ namespace MathExpressionParser
 {
     public class MathExpressionEvaluator : IMathExpressionEvaluator
     {
-        public double CalculationResult(string mathematicalExpression)
+        private readonly IPostfixConverter _converter;
+        private readonly IPostFixEvaluator _evaluator;
+
+        public MathExpressionEvaluator(IPostfixConverter converter, IPostFixEvaluator evaluator)
         {
-            if(mathematicalExpression.Contains("x"))
-                throw new MathExpressionException();
-            else
-                return 4;
+            this._converter = converter;
+            this._evaluator = evaluator;
+        }
+
+        public int CalculationResult(string mathematicalExpression)
+        {
+            var postFixExpression = _converter.InfixToPostfix(mathematicalExpression);
+            var result = _evaluator.CalculationResult(postFixExpression);
+
+            return result;
         }
     }
 }

@@ -63,6 +63,10 @@ namespace MathExpressionParser
                 {
                     PopFromStackUntilLeftParenthesisFound(postFixExpression);
                 }
+                else
+                {
+                    throw new MathExpressionException();
+                }
 
             }
 

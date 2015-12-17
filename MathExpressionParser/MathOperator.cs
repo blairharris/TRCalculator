@@ -8,6 +8,8 @@ namespace MathExpressionParser
 {
     public class MathOperator
     {
+        private static readonly string _supportedOperators = @"+-*/";
+
         public MathOperator(char c)
         {
             Symbol = c;
@@ -44,6 +46,10 @@ namespace MathExpressionParser
         {
             return (this.Associativity == Associativity.Right && (this.Precedence > other.Precedence));
         }
+
+        public static bool IsOperator(char c) => _supportedOperators.Contains(c);
+
+        public static bool IsNumber(char c) => char.IsNumber(c);
     }
 
     public enum Associativity

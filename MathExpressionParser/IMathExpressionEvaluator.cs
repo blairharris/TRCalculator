@@ -8,6 +8,6 @@ namespace MathExpressionParser
 {
     public interface IMathExpressionEvaluator
     {
-        double CalculationResult(string mathematicalExpression);
+        int CalculationResult(string mathematicalExpression);
     }
 }

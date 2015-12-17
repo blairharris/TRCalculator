@@ -8,47 +8,44 @@ namespace MathExpressionParser
 {
     public class PostFixEvaluator : IPostFixEvaluator
     {
-        private readonly string _supportedOperators = @"+-*/";
-
-
         public int CalculationResult(string postFixMathExpression)
         {
             var stack = new Stack<string>();
 
             foreach (char c in postFixMathExpression)
             {
-                if( IsNumber(c) )
+
+
+                if( MathOperator.IsNumber(c) )
                 {
                     stack.Push(c.ToString());
                 }
-                else if( IsOperator(c))
+                else if(MathOperator.IsOperator(c))
                 {
                     int leftOperand = Convert.ToInt32(stack.Pop());
                     int rightOperand = Convert.ToInt32(stack.Pop());
-                    int result = 0;
+
                     switch(c)
                     {
                         case '+':
-                            result = leftOperand + rightOperand;
+                            stack.Push( (leftOperand + rightOperand).ToString() );
                             break;
 
                         case '-':
-                            result = leftOperand - rightOperand;
+                            stack.Push((leftOperand - rightOperand).ToString());
                             break;
 
                         case '*':
-                            result = leftOperand * rightOperand;
+                            stack.Push((leftOperand * rightOperand).ToString());
                             break;
 
                         case '/':
-                            result = leftOperand / rightOperand;
+                            stack.Push((leftOperand / rightOperand).ToString());
                             break;
 
                         default:
                             throw new MathExpressionException();
                     }
-
-                    stack.Push(result.ToString());
                 }
                 else
                 {
@@ -58,9 +55,5 @@ namespace MathExpressionParser
 
             return Int32.Parse(stack.Peek());
         }
-
-        private bool IsOperator(char c) => _supportedOperators.Contains(c);
-
-        private bool IsNumber(char c) => char.IsNumber(c);
     }
 }

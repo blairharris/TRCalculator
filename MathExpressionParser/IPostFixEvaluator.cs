@@ -8,6 +8,6 @@ namespace MathExpressionParser
 {
     public interface IPostFixEvaluator
     {
-        double CalculationResult(string postFixMathExpression);
+        int CalculationResult(string postFixMathExpression);
     }
 }

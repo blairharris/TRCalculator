@@ -44,7 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bindings.cs" />
     <Compile Include="IMathExpressionEvaluator.cs" />
     <Compile Include="MathExpressionException.cs" />
     <Compile Include="IPostfixConverter.cs" />

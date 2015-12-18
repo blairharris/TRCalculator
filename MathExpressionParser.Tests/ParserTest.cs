@@ -24,7 +24,7 @@ namespace MathExpressionParser.Tests
         [TestMethod]
         public void ValidExpression_TwoPlusTwo()
         {
-            double result = _evaluator.CalculationResult("2+2");
+            int result = _evaluator.CalculationResult("2+2");
             result.Should().Be(4);
         }
 
@@ -33,6 +33,27 @@ namespace MathExpressionParser.Tests
         {
             Action a = () => _evaluator.CalculationResult("2+x");
             a.ShouldThrow<MathExpressionException>();
+        }
+
+        [TestMethod]
+        public void ValidExpression_SimpleBrackets1()
+        {
+            int result = _evaluator.CalculationResult("(1+2)*(2+2)");
+            result.Should().Be(12);
+        }
+
+        [TestMethod]
+        public void ValidExpression_NestedBrackets1()
+        {
+            int result = _evaluator.CalculationResult("((1+2)*(2+2))");
+            result.Should().Be(12);
+        }
+
+        [TestMethod]
+        public void ValidExpression_ExerciseExample()
+        {
+            int result = _evaluator.CalculationResult("(5+5)*(3+2)+1");
+            result.Should().Be(51);
         }
 
     }

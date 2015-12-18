@@ -27,7 +27,7 @@ namespace MathExpressionParser
                     break;
 
                 default:
-                    throw new MathExpressionException();
+                    throw new MathExpressionException("Unsupported math operator symbol");
             }
         }
 

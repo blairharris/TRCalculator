@@ -24,7 +24,7 @@ namespace MathExpressionParser
         {
             string validCharacters = _supportedOperators + _supportedParenthesis + _supportedOperands;
             if (validCharacters.Contains(Symbol) == false)
-                throw new MathExpressionException();
+                throw new MathExpressionException("Unsupported token character");
         }
 
         public bool IsNumber() => char.IsNumber(Symbol);

@@ -63,11 +63,6 @@ namespace MathExpressionParser
                 {
                     PopFromStackUntilLeftParenthesisFound();
                 }
-                else
-                {
-                    throw new MathExpressionException();
-                }
-
             }
 
             while (_operatorStack.Count > 0)

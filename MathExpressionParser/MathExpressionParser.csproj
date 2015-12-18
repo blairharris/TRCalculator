@@ -53,6 +53,7 @@
     <Compile Include="PostFixConverter.cs" />
     <Compile Include="PostFixEvaluator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Token.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

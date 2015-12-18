@@ -15,7 +15,7 @@ namespace MathExpressionParser.Tests
         [TestMethod]
         public void MulitplyPlusComparison()
         {
-            Add.IsLeftAssociativeAndPrecendenceIsLessThanOfEqualTo(Multiply).Should().BeTrue();
+            Add.IsLeftAssociativeAndPrecendenceIsLessThanOrEqualTo(Multiply).Should().BeTrue();
         }
     }
 }

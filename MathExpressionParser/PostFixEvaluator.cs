@@ -14,18 +14,18 @@ namespace MathExpressionParser
 
             foreach (char c in postFixMathExpression)
             {
+                var token = new Token(c);
 
-
-                if( MathOperator.IsNumber(c) )
+                if( token.IsNumber() )
                 {
-                    stack.Push(c.ToString());
+                    stack.Push(token.Symbol.ToString());
                 }
-                else if(MathOperator.IsOperator(c))
+                else if(token.IsOperator())
                 {
                     int leftOperand = Convert.ToInt32(stack.Pop());
                     int rightOperand = Convert.ToInt32(stack.Pop());
 
-                    switch(c)
+                    switch(token.Symbol)
                     {
                         case '+':
                             stack.Push( (leftOperand + rightOperand).ToString() );

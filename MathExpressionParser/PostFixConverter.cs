@@ -8,8 +8,8 @@ namespace MathExpressionParser
 {
     public class PostFixConverter : IPostfixConverter
     {
-        private readonly string _supportedOperators = @"+-*/";
-        private Stack<char> _operatorStack;
+        private Stack<Token> _operatorStack;
+        private StringBuilder _output;
 
         /// <summary>
         /// Takes an Infix math expression e.g. 2+2 and converts to postFix/reverse-polish-notation e.g. 22+
@@ -19,28 +19,28 @@ namespace MathExpressionParser
         /// <returns>Expression converted to PostFix notation</returns>
         public string InfixToPostfix(string infixMathExpression)
         {
-            _operatorStack = new Stack<char>();
-            var postFixExpression = new StringBuilder(); 
+            _operatorStack = new Stack<Token>();
+            _output = new StringBuilder(); 
 
             foreach (var c in infixMathExpression)
             {
-                if (IsNumber(c))
+                var token = new Token(c);
+
+                if (token.IsNumber())
                 {
-                    postFixExpression.Append(c);
+                    _output.Append(token.Symbol);
                 }
-                else if (IsOperator(c))
+                else if (token.IsOperator())
                 {
-
-
-                    var currentOperator = new MathOperator(c);
+                    var currentOperator = new MathOperator(token.Symbol);
                     if (_operatorStack.Count > 0)
                     {
                         while (ThereIsAMathOperatorAtTheTopOfTheStack())
                         {
-                            if (currentOperator.IsLeftAssociativeAndPrecendenceIsLessThanOfEqualTo(OperatorAtTopOfStack) ||
+                            if (currentOperator.IsLeftAssociativeAndPrecendenceIsLessThanOrEqualTo(OperatorAtTopOfStack) ||
                                 currentOperator.IsRightAssociativeAndPrecendenceIsGreaterThan(OperatorAtTopOfStack))
                             {
-                                postFixExpression.Append(_operatorStack.Pop());
+                                _output.Append(_operatorStack.Pop().Symbol);
                             }
                             else
                             {
@@ -49,19 +49,19 @@ namespace MathExpressionParser
                         }
                     }
 
-                    _operatorStack.Push(c);
-                    if (postFixExpression.Length == 0 && c == '-')
+                    _operatorStack.Push(token);
+                    if (_output.Length == 0 && token.Symbol == '-')
                     {
-                        postFixExpression.Append(_operatorStack.Pop());
+                        _output.Append(_operatorStack.Pop().Symbol);
                     }
                 }
-                else if (c == '(')
+                else if (token.IsLeftParenthesis())
                 {
-                    _operatorStack.Push(c);
+                    _operatorStack.Push(token);
                 }
-                else if (c == ')')
+                else if (token.IsRightParenthesis())
                 {
-                    PopFromStackUntilLeftParenthesisFound(postFixExpression);
+                    PopFromStackUntilLeftParenthesisFound();
                 }
                 else
                 {
@@ -72,18 +72,18 @@ namespace MathExpressionParser
 
             while (_operatorStack.Count > 0)
             {
-                postFixExpression.Append(_operatorStack.Pop());
+                _output.Append(_operatorStack.Pop().Symbol);
             }
 
-            return postFixExpression.ToString();
+            return _output.ToString();
         }
 
-        private void PopFromStackUntilLeftParenthesisFound(StringBuilder postFixExpression)
+        private void PopFromStackUntilLeftParenthesisFound()
         {
             while (_operatorStack.Count > 0)
             {
-                if (_operatorStack.Peek() != '(')
-                    postFixExpression.Append(_operatorStack.Pop());
+                if (_operatorStack.Peek().IsLeftParenthesis() == false)
+                    _output.Append(_operatorStack.Pop().Symbol);
                 else
                 {
                     _operatorStack.Pop();
@@ -98,14 +98,10 @@ namespace MathExpressionParser
                 return false;
             else
             {
-                return IsOperator(_operatorStack.Peek());
+                return _operatorStack.Peek().IsOperator();
             }
         }
 
-        private MathOperator OperatorAtTopOfStack => new MathOperator(_operatorStack.Peek());
-
-        private bool IsOperator(char c) => _supportedOperators.Contains(c);
-
-        private bool IsNumber(char c) => char.IsNumber(c);
+        private MathOperator OperatorAtTopOfStack => new MathOperator(_operatorStack.Peek().Symbol);
     }
 }

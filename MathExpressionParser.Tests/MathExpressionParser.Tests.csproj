@@ -67,11 +67,12 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Bindings.cs" />
-    <Compile Include="ParserTest.cs" />
+    <Compile Include="MathExpressionEvaluatorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PostFixConverterTest.cs" />
     <Compile Include="MathOperatorTest.cs" />
     <Compile Include="PostFixEvaluatorTest.cs" />
+    <Compile Include="TokenTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MathExpressionParser\MathExpressionParser.csproj">

@@ -8,7 +8,7 @@ using Ninject;
 namespace MathExpressionParser.Tests
 {
     [TestClass]
-    public class ParserTest
+    public class MathExpressionEvaluatorTest
     {
         private IMathExpressionEvaluator _evaluator;
 

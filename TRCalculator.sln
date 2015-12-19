@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TRCalculator", "TRCalculator\TRCalculator.csproj", "{DA51F128-7299-44E8-92F2-C18A00841ACA}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathExpressionParser", "MathExpressionParser\MathExpressionParser.csproj", "{64E92913-5748-4E59-A3A1-F5DC5B263ECD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathExpressionParser.Tests", "MathExpressionParser.Tests\MathExpressionParser.Tests.csproj", "{C4406620-7558-4760-817F-D0E48CEF204A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorUI", "CalculatorUI\CalculatorUI.csproj", "{E35EB50F-AF98-440C-BF82-D45DFBBF39E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{C4406620-7558-4760-817F-D0E48CEF204A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4406620-7558-4760-817F-D0E48CEF204A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4406620-7558-4760-817F-D0E48CEF204A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E35EB50F-AF98-440C-BF82-D45DFBBF39E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E35EB50F-AF98-440C-BF82-D45DFBBF39E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E35EB50F-AF98-440C-BF82-D45DFBBF39E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E35EB50F-AF98-440C-BF82-D45DFBBF39E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

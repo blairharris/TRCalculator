@@ -8,7 +8,7 @@ namespace MathExpressionParser
 {
     public class MathOperator
     {
-        private const char unaryMinus = '#';
+        private const char UnaryMinus = '#';
 
         public MathOperator(char c)
         {
@@ -16,7 +16,7 @@ namespace MathExpressionParser
 
             switch (c)
             {
-                case unaryMinus:
+                case UnaryMinus:
                     Precedence = 4;
                     Associativity = Associativity.Left;
                     break;

@@ -13,7 +13,7 @@
                 <ColumnDefinition Width="0*"/>
             </Grid.ColumnDefinitions>
             <Label x:Name="titleLabel" Content="Math Expresion Evaluator" FontSize="20" HorizontalAlignment="Left" Height="36" Margin="26,19,0,0" VerticalAlignment="Top" Width="268"/>
-            <TextBox x:Name="inputTextBox" HorizontalAlignment="Left" Height="30" Margin="32,117,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="285"/>
+            <TextBox x:Name="inputTextBox" HorizontalAlignment="Left" Height="30" Margin="32,117,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="285" KeyDown="inputTextBox_OnKeyDownHandler"/>
             <Button x:Name="evalueuateButton" Content="Evaluate" HorizontalAlignment="Left" Height="30" Margin="322,117,0,0" VerticalAlignment="Top" Width="100" Click="evalueuateButton_Click"/>
             <TextBox x:Name="outputTextBox" HorizontalAlignment="Left" Height="30" Margin="32,199,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="390" RenderTransformOrigin="-1.735,2.789"/>
             <Label x:Name="inputLabel" Content="Enter expression here and click Evaluate" HorizontalAlignment="Left" Height="23" Margin="32,89,0,0" VerticalAlignment="Top" Width="274"/>

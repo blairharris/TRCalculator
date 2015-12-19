@@ -30,10 +30,10 @@ namespace MathExpressionParser
 
                 if (token.IsNumber())
                 {
-                    _output.Append(token.Symbol);
+                    AddToOutput(token);
 
                     if (ThereIsAUnaryMinusAtTheTopOfTheStack())
-                        _output.Append(_operatorStack.Pop().Symbol);
+                        PopStackAndAddToOutput();
                 }
                 else if (token.IsOperator())
                 {
@@ -93,6 +93,16 @@ namespace MathExpressionParser
             return output.ToString();
         }
 
+        private void PopStackAndAddToOutput()
+        {
+            _output.Append(_operatorStack.Pop().Symbol);
+        }
+
+        private void AddToOutput(Token token)
+        {
+            _output.Append(token.Symbol);
+        }
+
         private void PopFromStackUntilLeftParenthesisFound()
         {
             while (_operatorStack.Count > 0)
@@ -109,22 +119,12 @@ namespace MathExpressionParser
 
         private bool ThereIsAUnaryMinusAtTheTopOfTheStack()
         {
-            if (_operatorStack.Count == 0)
-                return false;
-            else
-            {
-                return _operatorStack.Peek().Symbol == '#';
-            }
+            return _operatorStack.Count == 0 ? false : _operatorStack.Peek().Symbol == '#';
         }
 
         private bool ThereIsAMathOperatorAtTheTopOfTheStack()
         {
-            if (_operatorStack.Count == 0)
-                return false;
-            else
-            {
-                return _operatorStack.Peek().IsOperator();
-            }
+            return _operatorStack.Count == 0 ? false : _operatorStack.Peek().IsOperator();
         }
 
         private MathOperator OperatorAtTopOfStack => new MathOperator(_operatorStack.Peek().Symbol);

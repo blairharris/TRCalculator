@@ -20,7 +20,7 @@ namespace MathExpressionParser
 
                 if( token.IsNumber() )
                 {
-                    _stack.Push(token.Symbol.ToString());
+                    PushToStack(token);
                 }
                 else if(token.IsOperator())
                 {
@@ -34,6 +34,11 @@ namespace MathExpressionParser
             return Int32.Parse(_stack.Peek());
         }
 
+
+        private void PushToStack(Token token)
+        {
+            _stack.Push(token.Symbol.ToString());
+        }
 
         private void PopStackMakeNegativeAndPushBackAgain()
         {

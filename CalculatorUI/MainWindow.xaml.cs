@@ -37,16 +37,27 @@ namespace CalculatorUI
 
         private void evalueuateButton_Click(object sender, RoutedEventArgs e)
         {
+            Evaluate();
+        }
+
+        private void inputTextBox_OnKeyDownHandler(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+                Evaluate();
+        }
+
+        private void Evaluate()
+        {
             try
             {
                 int result = _evaluator.CalculationResult(inputTextBox.Text);
                 outputTextBox.Text = result.ToString();
             }
-            catch(MathExpressionException mathEx)
+            catch (MathExpressionException mathEx)
             {
                 outputTextBox.Text = mathEx.Message;
             }
-            catch(Exception generalEx)
+            catch (Exception generalEx)
             {
                 outputTextBox.Text = generalEx.Message;
             }

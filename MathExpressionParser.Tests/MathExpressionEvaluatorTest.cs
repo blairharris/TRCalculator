@@ -63,5 +63,11 @@ namespace MathExpressionParser.Tests
             result.Should().Be(51);
         }
 
+        [TestMethod]
+        public void ValidExpression_ComplexWithBracketsAndUnaryMinus()
+        {
+            int result = _evaluator.CalculationResult("(2+-5)*-(3+2)+1");
+            result.Should().Be(16);
+        }
     }
 }

@@ -26,6 +26,11 @@ namespace MathExpressionParser
                     Associativity = Associativity.Left;
                     break;
 
+                case '#':
+                    Precedence = 4;
+                    Associativity = Associativity.Left;
+                    break;
+
                 default:
                     throw new MathExpressionException("Unsupported math operator symbol");
             }

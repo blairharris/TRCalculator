@@ -21,7 +21,14 @@ namespace MathExpressionParser.Tests
         public void ValidExpression_MinusOnePlusTwo()
         {
             var result = _converter.InfixToPostfix("-1+2");
-            result.Should().Be("-12+");
+            result.Should().Be("1#2+");
+        }
+
+        [TestMethod]
+        public void ValidExpression_MinusOnePlusMinusFive()
+        {
+            var result = _converter.InfixToPostfix("-1+-5");
+            result.Should().Be("1#5#+");
         }
 
         [TestMethod]

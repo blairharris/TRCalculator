@@ -22,29 +22,41 @@ namespace MathExpressionParser
                 }
                 else if(token.IsOperator())
                 {
-                    int leftOperand = Convert.ToInt32(stack.Pop());
-                    int rightOperand = Convert.ToInt32(stack.Pop());
-
-                    switch(token.Symbol)
+                    if (c == '#')
                     {
-                        case '+':
-                            stack.Push( (leftOperand + rightOperand).ToString() );
-                            break;
+                        int leftOperand = Convert.ToInt32(stack.Pop());
+                        stack.Push((-leftOperand).ToString());
+                    }
+                    else
+                    {
+                        int leftOperand = Convert.ToInt32(stack.Pop());
+                        int rightOperand = Convert.ToInt32(stack.Pop());
 
-                        case '-':
-                            stack.Push((leftOperand - rightOperand).ToString());
-                            break;
+                        switch (token.Symbol)
+                        {
+                            case '+':
+                                stack.Push((leftOperand + rightOperand).ToString());
+                                break;
 
-                        case '*':
-                            stack.Push((leftOperand * rightOperand).ToString());
-                            break;
+                            case '-':
+                                stack.Push((leftOperand - rightOperand).ToString());
+                                break;
 
-                        case '/':
-                            stack.Push((leftOperand / rightOperand).ToString());
-                            break;
+                            case '*':
+                                stack.Push((leftOperand * rightOperand).ToString());
+                                break;
 
-                        default:
-                            throw new MathExpressionException("Unsupported math operator");
+                            case '/':
+                                stack.Push((leftOperand / rightOperand).ToString());
+                                break;
+
+                            case '#':
+                                stack.Push((-rightOperand).ToString());
+                                break;
+
+                            default:
+                                throw new MathExpressionException("Unsupported math operator");
+                        }
                     }
                 }
             }

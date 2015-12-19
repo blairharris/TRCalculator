@@ -20,15 +20,20 @@ namespace MathExpressionParser
         public string InfixToPostfix(string infixMathExpression)
         {
             _operatorStack = new Stack<Token>();
-            _output = new StringBuilder(); 
+            _output = new StringBuilder();
 
-            foreach (var c in infixMathExpression)
+            string infixMathExpressionWithUnaryMinusReplacement = ReplaceUnaryMinusWithHashSymbol(infixMathExpression);
+
+            foreach (var c in infixMathExpressionWithUnaryMinusReplacement)
             {
                 var token = new Token(c);
 
                 if (token.IsNumber())
                 {
                     _output.Append(token.Symbol);
+
+                    if (ThereIsAUnaryMinusAtTheTopOfTheStack())
+                        _output.Append(_operatorStack.Pop().Symbol);
                 }
                 else if (token.IsOperator())
                 {
@@ -73,6 +78,27 @@ namespace MathExpressionParser
             return _output.ToString();
         }
 
+
+
+        public string ReplaceUnaryMinusWithHashSymbol(string infixMathExpression)
+        {
+            var output = new StringBuilder();
+
+            char prevChar = Char.MinValue;
+            foreach(char c in infixMathExpression)
+            {
+                var token = new Token(c);
+                if (token.IsUnaryMinus(prevChar))
+                    output.Append('#');
+                else
+                    output.Append(c);
+
+                prevChar = c;
+            }
+
+            return output.ToString();
+        }
+
         private void PopFromStackUntilLeftParenthesisFound()
         {
             while (_operatorStack.Count > 0)
@@ -84,6 +110,16 @@ namespace MathExpressionParser
                     _operatorStack.Pop();
                     break;
                 }
+            }
+        }
+
+        private bool ThereIsAUnaryMinusAtTheTopOfTheStack()
+        {
+            if (_operatorStack.Count == 0)
+                return false;
+            else
+            {
+                return _operatorStack.Peek().Symbol == '#';
             }
         }
 

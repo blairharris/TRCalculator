@@ -43,6 +43,13 @@ namespace MathExpressionParser.Tests
         }
 
         [TestMethod]
+        public void ValidExpression_SimpleBrackets2()
+        {
+            int result = _evaluator.CalculationResult("(1+2)/2");
+            result.Should().Be(0);
+        }
+
+        [TestMethod]
         public void ValidExpression_NestedBrackets1()
         {
             int result = _evaluator.CalculationResult("((1+2)*(2+2))");

@@ -33,6 +33,7 @@ namespace MathExpressionParser
         }
         public bool IsNumber() => char.IsNumber(Symbol);
         public bool IsOperator() => _supportedOperators.Contains(Symbol);
+        public bool IsUnaryMinus() => Symbol == '#';
         public bool IsLeftParenthesis() => Symbol == '(';
         public bool IsRightParenthesis() => Symbol == ')';
     }

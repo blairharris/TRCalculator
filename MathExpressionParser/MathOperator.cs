@@ -8,12 +8,19 @@ namespace MathExpressionParser
 {
     public class MathOperator
     {
+        private const char unaryMinus = '#';
+
         public MathOperator(char c)
         {
             Symbol = c;
 
             switch (c)
             {
+                case unaryMinus:
+                    Precedence = 4;
+                    Associativity = Associativity.Left;
+                    break;
+
                 case '*':
                 case '/':
                     Precedence = 3;
@@ -26,10 +33,6 @@ namespace MathExpressionParser
                     Associativity = Associativity.Left;
                     break;
 
-                case '#':
-                    Precedence = 4;
-                    Associativity = Associativity.Left;
-                    break;
 
                 default:
                     throw new MathExpressionException("Unsupported math operator symbol");

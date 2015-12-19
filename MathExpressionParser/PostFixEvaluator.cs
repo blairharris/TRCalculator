@@ -8,9 +8,11 @@ namespace MathExpressionParser
 {
     public class PostFixEvaluator : IPostFixEvaluator
     {
+        private Stack<String> _stack;
+
         public int CalculationResult(string postFixMathExpression)
         {
-            var stack = new Stack<string>();
+            _stack = new Stack<string>();
 
             foreach (char c in postFixMathExpression)
             {
@@ -18,50 +20,54 @@ namespace MathExpressionParser
 
                 if( token.IsNumber() )
                 {
-                    stack.Push(token.Symbol.ToString());
+                    _stack.Push(token.Symbol.ToString());
                 }
                 else if(token.IsOperator())
                 {
-                    if (c == '#')
-                    {
-                        int leftOperand = Convert.ToInt32(stack.Pop());
-                        stack.Push((-leftOperand).ToString());
-                    }
+                    if (token.IsUnaryMinus())
+                        PopStackMakeNegativeAndPushBackAgain();
                     else
-                    {
-                        int leftOperand = Convert.ToInt32(stack.Pop());
-                        int rightOperand = Convert.ToInt32(stack.Pop());
-
-                        switch (token.Symbol)
-                        {
-                            case '+':
-                                stack.Push((leftOperand + rightOperand).ToString());
-                                break;
-
-                            case '-':
-                                stack.Push((leftOperand - rightOperand).ToString());
-                                break;
-
-                            case '*':
-                                stack.Push((leftOperand * rightOperand).ToString());
-                                break;
-
-                            case '/':
-                                stack.Push((leftOperand / rightOperand).ToString());
-                                break;
-
-                            case '#':
-                                stack.Push((-rightOperand).ToString());
-                                break;
-
-                            default:
-                                throw new MathExpressionException("Unsupported math operator");
-                        }
-                    }
+                        PopStackTwiceApplyBinaryOpAndPushBackAgain(token);
                 }
             }
 
-            return Int32.Parse(stack.Peek());
+            return Int32.Parse(_stack.Peek());
+        }
+
+
+        private void PopStackMakeNegativeAndPushBackAgain()
+        {
+            int leftOperand = Convert.ToInt32(_stack.Pop());
+            _stack.Push((-leftOperand).ToString());
+        }
+
+        private void PopStackTwiceApplyBinaryOpAndPushBackAgain(Token token)
+        {
+            int leftOperand = Convert.ToInt32(_stack.Pop());
+            int rightOperand = Convert.ToInt32(_stack.Pop());
+
+            switch (token.Symbol)
+            {
+                case '+':
+                    _stack.Push((leftOperand + rightOperand).ToString());
+                    break;
+
+                case '-':
+                    _stack.Push((leftOperand - rightOperand).ToString());
+                    break;
+
+                case '*':
+                    _stack.Push((leftOperand * rightOperand).ToString());
+                    break;
+
+                case '/':
+                    _stack.Push((leftOperand / rightOperand).ToString());
+                    break;
+
+
+                default:
+                    throw new MathExpressionException("Unsupported math operator");
+            }
         }
     }
 }

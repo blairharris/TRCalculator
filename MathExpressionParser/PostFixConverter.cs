@@ -38,27 +38,21 @@ namespace MathExpressionParser
                 else if (token.IsOperator())
                 {
                     var currentOperator = new MathOperator(token.Symbol);
-                    if (_operatorStack.Count > 0)
+
+                    while (ThereIsAMathOperatorAtTheTopOfTheStack())
                     {
-                        while (ThereIsAMathOperatorAtTheTopOfTheStack())
+                        if (currentOperator.IsLeftAssociativeAndPrecendenceIsLessThanOrEqualTo(OperatorAtTopOfStack) ||
+                            currentOperator.IsRightAssociativeAndPrecendenceIsGreaterThan(OperatorAtTopOfStack))
                         {
-                            if (currentOperator.IsLeftAssociativeAndPrecendenceIsLessThanOrEqualTo(OperatorAtTopOfStack) ||
-                                currentOperator.IsRightAssociativeAndPrecendenceIsGreaterThan(OperatorAtTopOfStack))
-                            {
-                                _output.Append(_operatorStack.Pop().Symbol);
-                            }
-                            else
-                            {
-                                break;
-                            }
+                            _output.Append(_operatorStack.Pop().Symbol);
+                        }
+                        else
+                        {
+                            break;
                         }
                     }
-
+                    
                     _operatorStack.Push(token);
-                    if (_output.Length == 0 && token.Symbol == '-')
-                    {
-                        _output.Append(_operatorStack.Pop().Symbol);
-                    }
                 }
                 else if (token.IsLeftParenthesis())
                 {

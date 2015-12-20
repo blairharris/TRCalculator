@@ -44,7 +44,7 @@ namespace MathExpressionParser
                         if (currentOperator.IsLeftAssociativeAndPrecendenceIsLessThanOrEqualTo(OperatorAtTopOfStack) ||
                             currentOperator.IsRightAssociativeAndPrecendenceIsGreaterThan(OperatorAtTopOfStack))
                         {
-                            _output.Append(_operatorStack.Pop().Symbol);
+                            PopStackAndAddToOutput(); ;
                         }
                         else
                         {
@@ -66,7 +66,7 @@ namespace MathExpressionParser
 
             while (_operatorStack.Count > 0)
             {
-                _output.Append(_operatorStack.Pop().Symbol);
+                PopStackAndAddToOutput();
             }
 
             return _output.ToString();
@@ -108,7 +108,7 @@ namespace MathExpressionParser
             while (_operatorStack.Count > 0)
             {
                 if (_operatorStack.Peek().IsLeftParenthesis() == false)
-                    _output.Append(_operatorStack.Pop().Symbol);
+                    PopStackAndAddToOutput();
                 else
                 {
                     _operatorStack.Pop();

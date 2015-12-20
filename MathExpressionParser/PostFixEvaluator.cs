@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MathExpressionParser
 {
     public class PostFixEvaluator : IPostFixEvaluator
     {
-        private Stack<String> _stack;
+        private Stack<string> _stack;
 
         public int CalculationResult(string postFixMathExpression)
         {
@@ -31,7 +28,7 @@ namespace MathExpressionParser
                 }
             }
 
-            return Int32.Parse(_stack.Peek());
+            return int.Parse(_stack.Peek());
         }
 
 
@@ -51,28 +48,10 @@ namespace MathExpressionParser
             int leftOperand = Convert.ToInt32(_stack.Pop());
             int rightOperand = Convert.ToInt32(_stack.Pop());
 
-            switch (token.Symbol)
-            {
-                case '+':
-                    _stack.Push((leftOperand + rightOperand).ToString());
-                    break;
+            var mathOperator = new MathOperator(token.Symbol);
+            int result = mathOperator.ActOn(leftOperand, rightOperand);
 
-                case '-':
-                    _stack.Push((leftOperand - rightOperand).ToString());
-                    break;
-
-                case '*':
-                    _stack.Push((leftOperand * rightOperand).ToString());
-                    break;
-
-                case '/':
-                    _stack.Push((leftOperand / rightOperand).ToString());
-                    break;
-
-
-                default:
-                    throw new MathExpressionException("Unsupported math operator");
-            }
+            _stack.Push(result.ToString());
         }
     }
 }

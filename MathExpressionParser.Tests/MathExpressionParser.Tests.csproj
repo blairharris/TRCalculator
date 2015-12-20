@@ -73,6 +73,7 @@
     <Compile Include="MathOperatorTest.cs" />
     <Compile Include="PostFixEvaluatorTest.cs" />
     <Compile Include="TokenTest.cs" />
+    <Compile Include="InfixParserTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MathExpressionParser\MathExpressionParser.csproj">

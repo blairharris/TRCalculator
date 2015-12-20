@@ -1,22 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MathExpressionParser
+﻿namespace MathExpressionParser
 {
     public class MathOperator
     {
-        private const char UnaryMinus = '#';
-
         public MathOperator(char c)
         {
             Symbol = c;
 
             switch (c)
             {
-                case UnaryMinus:
+                case Token.UnaryMinus:
                     Precedence = 4;
                     Associativity = Associativity.Left;
                     break;
@@ -39,18 +31,48 @@ namespace MathExpressionParser
             }
         }
 
+        public int ActOn(int leftOperand, int rightOperand)
+        {
+            int result;
+
+            switch (Symbol)
+            {
+                case '+':
+                    result = leftOperand + rightOperand;
+                    break;
+
+                case '-':
+                    result = leftOperand - rightOperand;
+                    break;
+
+                case '*':
+                    result = leftOperand * rightOperand;
+                    break;
+
+                case '/':
+                    result = leftOperand / rightOperand;
+                    break;
+
+
+                default:
+                    throw new MathExpressionException("Unsupported math operator");
+            }
+
+            return result;
+        }
+
         public char Symbol { get; set; }
         public int Precedence { get; set; }
         public Associativity Associativity { get; set; }
 
         public bool IsLeftAssociativeAndPrecendenceIsLessThanOrEqualTo(MathOperator other)
         {
-            return (this.Associativity == Associativity.Left && (this.Precedence <= other.Precedence));
+            return Associativity == Associativity.Left && (Precedence <= other.Precedence);
         }
 
         internal bool IsRightAssociativeAndPrecendenceIsGreaterThan(MathOperator other)
         {
-            return (this.Associativity == Associativity.Right && (this.Precedence > other.Precedence));
+            return Associativity == Associativity.Right && (Precedence > other.Precedence);
         }
     }
 

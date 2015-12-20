@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MathExpressionParser
+﻿namespace MathExpressionParser
 {
     public class MathExpressionEvaluator : IMathExpressionEvaluator
     {
@@ -13,8 +7,8 @@ namespace MathExpressionParser
 
         public MathExpressionEvaluator(IPostfixConverter converter, IPostFixEvaluator evaluator)
         {
-            this._converter = converter;
-            this._evaluator = evaluator;
+            _converter = converter;
+            _evaluator = evaluator;
         }
 
         public int CalculationResult(string mathematicalExpression)

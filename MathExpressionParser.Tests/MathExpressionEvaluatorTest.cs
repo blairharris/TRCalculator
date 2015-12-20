@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MathExpressionParser;
 using FluentAssertions;
 using Ninject;
 

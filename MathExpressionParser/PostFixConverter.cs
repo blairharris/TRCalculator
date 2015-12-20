@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace MathExpressionParser
 {
@@ -22,12 +19,10 @@ namespace MathExpressionParser
             _operatorStack = new Stack<Token>();
             _output = new StringBuilder();
 
-            string infixMathExpressionWithUnaryMinusReplacement = ReplaceUnaryMinusWithHashSymbol(infixMathExpression);
-
-            foreach (var c in infixMathExpressionWithUnaryMinusReplacement)
+            var tokenList = Parse(infixMathExpression);
+ 
+            foreach(Token token in tokenList)
             {
-                var token = new Token(c);
-
                 if (token.IsNumber())
                 {
                     AddToOutput(token);
@@ -44,7 +39,7 @@ namespace MathExpressionParser
                         if (currentOperator.IsLeftAssociativeAndPrecendenceIsLessThanOrEqualTo(OperatorAtTopOfStack) ||
                             currentOperator.IsRightAssociativeAndPrecendenceIsGreaterThan(OperatorAtTopOfStack))
                         {
-                            PopStackAndAddToOutput(); ;
+                            PopStackAndAddToOutput();
                         }
                         else
                         {
@@ -72,25 +67,35 @@ namespace MathExpressionParser
             return _output.ToString();
         }
 
-
-
-        public string ReplaceUnaryMinusWithHashSymbol(string infixMathExpression)
+        public List<Token> Parse(string infixExpression)
         {
-            var output = new StringBuilder();
+            var output = new List<Token>();
 
-            char prevChar = Char.MinValue;
-            foreach(char c in infixMathExpression)
+            var prevChar = char.MinValue;
+            foreach (var c in infixExpression)
             {
-                var token = new Token(c);
-                if (token.IsUnaryMinus(prevChar))
-                    output.Append('#');
+                if (Token.IsNumber(c))
+                {
+                    if (Token.IsNumber(prevChar)) throw new MathExpressionException("Only single digit integers are supported");
+                    else output.Add(new Token(c));
+                }
+                else if (Token.IsUnaryMinus(prevChar, c))
+                {
+                    output.Add(new Token(Token.UnaryMinus));
+                }
+                else if (Token.IsOperator(c) || Token.IsParenthesis(c))
+                {
+                    output.Add(new Token(c));
+                }
                 else
-                    output.Append(c);
+                {
+                    throw new MathExpressionException($"Unsupported character '{c}' found");
+                }
 
                 prevChar = c;
             }
 
-            return output.ToString();
+            return output;
         }
 
         private void PopStackAndAddToOutput()
@@ -119,12 +124,12 @@ namespace MathExpressionParser
 
         private bool ThereIsAUnaryMinusAtTheTopOfTheStack()
         {
-            return _operatorStack.Count == 0 ? false : _operatorStack.Peek().Symbol == '#';
+            return _operatorStack.Count != 0 && _operatorStack.Peek().Symbol == '#';
         }
 
         private bool ThereIsAMathOperatorAtTheTopOfTheStack()
         {
-            return _operatorStack.Count == 0 ? false : _operatorStack.Peek().IsOperator();
+            return _operatorStack.Count != 0 && _operatorStack.Peek().IsOperator();
         }
 
         private MathOperator OperatorAtTopOfStack => new MathOperator(_operatorStack.Peek().Symbol);

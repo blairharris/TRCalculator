@@ -14,7 +14,7 @@
         public int CalculationResult(string mathematicalExpression)
         {
             var postFixExpression = _converter.InfixToPostfix(mathematicalExpression);
-            var result = _evaluator.CalculationResult(postFixExpression);
+            var result = _evaluator.EvaluatePostFix(postFixExpression);
 
             return result;
         }

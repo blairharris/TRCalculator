@@ -2,6 +2,6 @@
 {
     public interface IPostFixEvaluator
     {
-        int CalculationResult(string postFixMathExpression);
+        int EvaluatePostFix(string postFixMathExpression);
     }
 }

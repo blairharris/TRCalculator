@@ -7,11 +7,11 @@ namespace MathExpressionParser
     {
         private Stack<string> _stack;
 
-        public int CalculationResult(string postFixMathExpression)
+        public int EvaluatePostFix(string postFixMathExpression)
         {
             _stack = new Stack<string>();
 
-            foreach (char c in postFixMathExpression)
+            foreach (var c in postFixMathExpression)
             {
                 var token = new Token(c);
 
@@ -39,17 +39,17 @@ namespace MathExpressionParser
 
         private void PopStackMakeNegativeAndPushBackAgain()
         {
-            int leftOperand = Convert.ToInt32(_stack.Pop());
+            var leftOperand = Convert.ToInt32(_stack.Pop());
             _stack.Push((-leftOperand).ToString());
         }
 
         private void PopStackTwiceApplyBinaryOpAndPushBackAgain(Token token)
         {
-            int leftOperand = Convert.ToInt32(_stack.Pop());
-            int rightOperand = Convert.ToInt32(_stack.Pop());
+            var leftOperand = Convert.ToInt32(_stack.Pop());
+            var rightOperand = Convert.ToInt32(_stack.Pop());
 
             var mathOperator = new MathOperator(token.Symbol);
-            int result = mathOperator.ActOn(leftOperand, rightOperand);
+            var result = mathOperator.ActOn(leftOperand, rightOperand);
 
             _stack.Push(result.ToString());
         }

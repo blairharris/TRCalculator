@@ -21,7 +21,7 @@ namespace MathExpressionParser
 
             var tokenList = Parse(infixMathExpression);
  
-            foreach(Token token in tokenList)
+            foreach(var token in tokenList)
             {
                 if (token.IsNumber())
                 {

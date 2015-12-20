@@ -22,7 +22,7 @@ namespace MathExpressionParser
         {
             const string validCharacters = SupportedOperators + SupportedParenthesis + SupportedOperands;
             if (validCharacters.Contains(Symbol) == false)
-                throw new MathExpressionException("Unsupported token character");
+                throw new MathExpressionException($"Unsupported character '{Symbol}' found");
         }
 
         public bool IsNumber() => char.IsNumber(Symbol);

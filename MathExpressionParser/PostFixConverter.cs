@@ -101,11 +101,6 @@ namespace MathExpressionParser
         }
 
 
-        private bool MultiDigitNumber(char prev, Token current)
-        {
-            return (char.IsNumber(prev) && current.IsNumber());
-        }
-
         private void PopStackAndAddToOutput()
         {
             _output.Append(_operatorStack.Pop().Symbol);

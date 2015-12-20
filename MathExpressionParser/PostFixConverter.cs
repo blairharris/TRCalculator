@@ -72,30 +72,38 @@ namespace MathExpressionParser
             var output = new List<Token>();
 
             var prevChar = char.MinValue;
-            foreach (var c in infixExpression)
+            foreach (var currChar in infixExpression)
             {
-                if (Token.IsNumber(c))
+                var currToken = new Token(currChar);
+
+                if (currToken.IsNumber())
                 {
-                    if (Token.IsNumber(prevChar)) throw new MathExpressionException("Only single digit integers are supported");
-                    else output.Add(new Token(c));
+                    if (char.IsNumber(prevChar)) throw new MathExpressionException("Only single digit integers are supported");
+                    else output.Add(currToken);
                 }
-                else if (Token.IsUnaryMinus(prevChar, c))
+                else if (currToken.DetermineIfUnaryMinus(prevChar))
                 {
-                    output.Add(new Token(Token.UnaryMinus));
+                    output.Add(new Token(MathOperator.UnaryMinusAliasSymbol));
                 }
-                else if (Token.IsOperator(c) || Token.IsParenthesis(c))
+                else if (currToken.IsOperator() || currToken.IsParenthesis())
                 {
-                    output.Add(new Token(c));
+                    output.Add(new Token(currChar));
                 }
                 else
                 {
-                    throw new MathExpressionException($"Unsupported character '{c}' found");
+                    throw new MathExpressionException($"Unsupported character '{currChar}' found");
                 }
 
-                prevChar = c;
+                prevChar = currChar;
             }
 
             return output;
+        }
+
+
+        private bool MultiDigitNumber(char prev, Token current)
+        {
+            return (char.IsNumber(prev) && current.IsNumber());
         }
 
         private void PopStackAndAddToOutput()

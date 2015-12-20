@@ -4,12 +4,11 @@ namespace MathExpressionParser
 {
     public class Token
     {
-        private const string SupportedOperators = @"+-*/#";
+        private static readonly string SupportedOperators = @"+-*/" + MathOperator.UnaryMinusAliasSymbol;
         private const string SupportedParenthesis = "()";
         private const string SupportedOperands = "0123456789";
 
 
-        public const char UnaryMinus = '#';
         public char Symbol { get; }
 
         public Token(char c)
@@ -20,23 +19,21 @@ namespace MathExpressionParser
 
         private void Validate()
         {
-            const string validCharacters = SupportedOperators + SupportedParenthesis + SupportedOperands;
+            string validCharacters = SupportedOperators + SupportedParenthesis + SupportedOperands;
             if (validCharacters.Contains(Symbol) == false)
                 throw new MathExpressionException($"Unsupported character '{Symbol}' found");
         }
 
         public bool IsNumber() => char.IsNumber(Symbol);
         public bool IsOperator() => SupportedOperators.Contains(Symbol);
-        public bool IsUnaryMinus() => Symbol == UnaryMinus;
+        public bool IsUnaryMinus() => Symbol == MathOperator.UnaryMinusAliasSymbol;
         public bool IsLeftParenthesis() => Symbol == '(';
         public bool IsRightParenthesis() => Symbol == ')';
 
-        public static bool IsNumber(char c) => char.IsNumber(c);
-        public static bool IsUnaryMinus(char prev, char curr)
+        public bool DetermineIfUnaryMinus(char prev)
         {
-            return curr == '-' && (prev == char.MinValue || SupportedOperators.Contains(prev));
+            return Symbol == '-' && (prev == char.MinValue || SupportedOperators.Contains(prev));
         }
-        public static bool IsOperator(char c) => SupportedOperators.Contains(c);
-        public static bool IsParenthesis(char c) => c == '(' || c == ')';
+        public bool IsParenthesis() => Symbol == '(' || Symbol == ')';
     }
 }

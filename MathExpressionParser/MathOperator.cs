@@ -2,13 +2,15 @@
 {
     public class MathOperator
     {
+        public const char UnaryMinusAliasSymbol = '#';
+
         public MathOperator(char c)
         {
             Symbol = c;
 
             switch (c)
             {
-                case Token.UnaryMinus:
+                case UnaryMinusAliasSymbol:
                     Precedence = 4;
                     Associativity = Associativity.Left;
                     break;
